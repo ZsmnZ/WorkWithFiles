@@ -4,9 +4,7 @@ using System.IO;
 namespace ReadMeFile
 {
     public class Program
-    {
-       public DateTime time = new DateTime();
-        
+    {          
         public static void Main()
         {
             ClearFolders();
@@ -34,18 +32,25 @@ namespace ReadMeFile
             }
             string[] dirs = Directory.GetDirectories(path);
             string[] files = Directory.GetFiles(path);
-;
-            for (int i = 0; i < dirs.Length; i++)
+           foreach(string dir in dirs)
             {
-                if(TimeSpan.FromMinutes(30))
-                {
-                    folders.Delete(true);
+                DirectoryInfo di = new DirectoryInfo(dir);
+                if((DateTime.Now - di.LastWriteTime) > TimeSpan.FromMinutes(30))
+                { 
+                    di.Delete(true);
+                    Console.WriteLine($"папка: {di.FullName} - удалена");
                 }
-
-              
             }
-
-        }
-        
+           foreach(string file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                if ((DateTime.Now - fi.LastWriteTime) > TimeSpan.FromMinutes(30))
+                {
+                    fi.Delete();
+                    Console.WriteLine($"файл : {fi.Name} - удалён");
+                }
+            }
+          
+        }      
     }
 }
